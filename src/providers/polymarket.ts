@@ -84,7 +84,9 @@ export function parseOutcomeProbabilities(market: PolymarketMarket): Array<{ out
   }).sort((a, b) => b.probability_pct - a.probability_pct);
 }
 
-export function formatVolume(volume: number): string {
+export function formatVolume(value: unknown): string {
+  const volume = parseFloat(String(value ?? "0"));
+  if (isNaN(volume)) return "$0";
   if (volume >= 1_000_000) return `$${(volume / 1_000_000).toFixed(1)}M`;
   if (volume >= 1_000) return `$${(volume / 1_000).toFixed(0)}K`;
   return `$${volume.toFixed(0)}`;
