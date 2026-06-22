@@ -13,6 +13,7 @@ import * as squad from "./tools/squad.js";
 import * as playerStats from "./tools/player-stats.js";
 import * as matchOdds from "./tools/match-odds.js";
 import * as matchAdvancedStats from "./tools/match-advanced-stats.js";
+import * as predictionMarket from "./tools/prediction-market.js";
 
 const tools = [
   {
@@ -153,6 +154,21 @@ const tools = [
     },
     handler: matchAdvancedStats.handler,
     schema: matchAdvancedStats.schema,
+  },
+  {
+    name: "get_prediction_market",
+    description:
+      "Returns real-money crowd probabilities from Polymarket for FIFA World Cup 2026 events (match winners, group qualifiers, tournament winner, etc.). No API key required. Prices come from decentralized traders and have no bookmaker margin, making them a clean probability signal. Compare with get_match_odds for bookmaker vs market divergences.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Search query, e.g. 'Brazil World Cup', 'France vs Argentina', 'World Cup winner 2026'" },
+        limit: { type: "number", description: "Max markets to return. Default: 5" },
+      },
+      required: ["query"],
+    },
+    handler: predictionMarket.handler,
+    schema: predictionMarket.schema,
   },
 ];
 
