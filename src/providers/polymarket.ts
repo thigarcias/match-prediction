@@ -63,9 +63,19 @@ export async function getMarketPrices(conditionId: string): Promise<CLOBMarketPr
   }
 }
 
+function parseJsonArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value as string[];
+  if (typeof value === "string") {
+    try { return JSON.parse(value) as string[]; } catch { return []; }
+  }
+  return [];
+}
+
 export function parseOutcomeProbabilities(market: PolymarketMarket): Array<{ outcome: string; probability_pct: number; price: number }> {
-  return market.outcomes.map((outcome, i) => {
-    const price = parseFloat(market.outcomePrices[i] ?? "0");
+  const outcomes = parseJsonArray(market.outcomes);
+  const prices = parseJsonArray(market.outcomePrices);
+  return outcomes.map((outcome, i) => {
+    const price = parseFloat(prices[i] ?? "0");
     return {
       outcome,
       price,
