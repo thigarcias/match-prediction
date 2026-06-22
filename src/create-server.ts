@@ -11,6 +11,8 @@ import * as standings from "./tools/standings.js";
 import * as matchStats from "./tools/match-stats.js";
 import * as squad from "./tools/squad.js";
 import * as playerStats from "./tools/player-stats.js";
+import * as matchOdds from "./tools/match-odds.js";
+import * as matchAdvancedStats from "./tools/match-advanced-stats.js";
 
 const tools = [
   {
@@ -121,6 +123,36 @@ const tools = [
     },
     handler: squad.handler,
     schema: squad.schema,
+  },
+  {
+    name: "get_match_odds",
+    description:
+      "Returns current betting odds for upcoming FIFA World Cup 2026 matches from multiple bookmakers (Bet365, Pinnacle, etc.). Includes consensus odds and market-implied probabilities normalized to remove bookmaker margin. Use this to gauge market sentiment on a match outcome.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        team1: { type: "string", description: "One of the teams, e.g. 'Brazil', 'France'" },
+        team2: { type: "string", description: "The opposing team (optional)" },
+      },
+      required: ["team1"],
+    },
+    handler: matchOdds.handler,
+    schema: matchOdds.schema,
+  },
+  {
+    name: "get_match_advanced_stats",
+    description:
+      "Returns detailed in-match statistics for a FIFA World Cup 2026 game: possession, shots, xG, corners, fouls, cards, pass accuracy, match events (goals/cards with minutes), and team lineups/formations. Requires API_FOOTBALL_KEY.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        team1: { type: "string", description: "One of the teams, e.g. 'Brazil'" },
+        team2: { type: "string", description: "The opposing team" },
+      },
+      required: ["team1", "team2"],
+    },
+    handler: matchAdvancedStats.handler,
+    schema: matchAdvancedStats.schema,
   },
 ];
 
